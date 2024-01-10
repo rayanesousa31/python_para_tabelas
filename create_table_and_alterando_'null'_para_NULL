@@ -1,0 +1,32 @@
+lista=[
+    'col_name1',
+    'col_name2',
+    'col_name3',
+    'col_name4',
+    'col_name5',
+    'col_name6',
+    'col_name7'
+    ]
+
+opcao = int(input('''Qual opção deseja? Digite o número:
+                    1 - Alteração dos nulos ('\\N' ou 'null' para NULL)
+                    2 - Criação de tabela \n'''))
+
+if opcao == 1:
+    arquivo1 = 'alteracao_nulos.txt'
+    with open(arquivo1, 'w') as arquivo:
+        for campo in lista:
+            arquivo.write(f"{campo} = iif(lower({campo}) = '\\N' or lower({campo}) = 'null', null, {campo}),\n")
+            
+elif opcao == 2:
+    tabela = input(print("Qual o nome da tabela que deseja criar?"))
+    arquivo1 = 'criacao_tabela.txt'
+    #print("CREATE TABLE \n")
+    with open(arquivo1, 'w') as arquivo:
+        print(f"CREATE TABLE {tabela}\n")
+        for campo in lista:
+            arquivo.write(f"{tabela}.{campo},\n")
+else:
+    print("Opção Inválida")
+
+print(f"Arquivo '{arquivo1}' foi criado com sucesso.")  
