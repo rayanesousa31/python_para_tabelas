@@ -12,19 +12,21 @@ lista=[
     ]
 
 opcao = int(input('''Qual opção deseja? Digite o número das opções abaixo:
-1 - Alteração dos nulos ('\\N' ou 'null' para NULL)
-2 - Criação de tabela \n'''))
+1 - Alteração dos nulos ('\\N' ou 'null' para NULL) - UPDATE SET
+2 - Criação de tabela (CREATE TABLE) 
+3 - SelecionandO as colunas de uma tabela (SELECT) \n'''))
 
 if opcao == 1:
     tabela = input("Qual o nome da tabela para fazer UPDATE? \n")
     arquivo1 = 'alteracao_nulos_{}.txt'.format(tabela)
     with open(arquivo1, 'w') as arquivo:
-        arquivo.write("UPDATE [{}]".format(tabela))
+        arquivo.write("UPDATE [{}] \n SET".format(tabela))
         for index, campo in enumerate(lista):
             if index == len(lista) -1 : # Verifica se é o último campo da lista
                 arquivo.write(f"    {campo} = iif(lower({campo}) = '\\N' or lower({campo}) = 'null', null, {campo} \n")
             else:
                 arquivo.write(f"    {campo} = iif(lower({campo}) = '\\N' or lower({campo}) = 'null', null, {campo}, \n")
+
 elif opcao == 2:
     tabela = input("Qual o nome da tabela que deseja criar? \n")
     arquivo1 = 'criacao_tabela_{}.txt'.format(tabela)
@@ -32,10 +34,22 @@ elif opcao == 2:
         arquivo.write(f"CREATE TABLE {tabela}\n")
         for index, campo in enumerate(lista):
             if index == len(lista) - 1:  # Verifica se é o último campo da lista
-                arquivo.write(f"    {tabela}.{campo}\n")
+                arquivo.write(f"    {campo} VARCHAR(255) \n")
             else:
-                arquivo.write(f"    {tabela}.{campo},\n")
+                arquivo.write(f"    {campo} VARCHAR(255),\n")
+                
+elif opcao == 3:
+    tabela = input("Qual o nome da tabela que deseja selecionar? \n")
+    arquivo1 = 'selecao_tabela_{}.txt'.format(tabela)
+    with open(arquivo1, 'w') as arquivo:
+        arquivo.write("SELECT \n")
+        for index, campo in enumerate(lista):
+            if index == len(lista) - 1:  # Verifica se é o último campo da lista
+                arquivo.write(f"    {tabela}.{campo} \n")
+            else:
+                arquivo.write(f"    {tabela}.{campo} ,\n")
+        arquivo.write("FROM {}".format(tabela))
 else:
     print("Opção Inválida")
 
-print(f"Arquivo '{arquivo1}' foi criado com sucesso.")
+print(f"Arquivo '{arquivo1}' foi criado com sucesso.")    
